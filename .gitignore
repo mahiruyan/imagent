@@ -1,0 +1,15 @@
+.env
+.env.production
+.venv/
+__pycache__/
+*.pyc
+*.swp
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+exports/
+backups/
+*.sqlite3
