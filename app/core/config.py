@@ -22,6 +22,14 @@ class Settings(BaseSettings):
     google_maps_api_key: str | None = Field(default=None, alias="GOOGLE_MAPS_API_KEY")
     google_maps_backend_key: str | None = Field(default=None, alias="GOOGLE_MAPS_BACKEND_KEY")
     export_template_path: str | None = Field(default=None, alias="EXPORT_TEMPLATE_PATH")
+    frontend_origins: str = Field(
+        default="http://localhost:5173,http://127.0.0.1:5173",
+        alias="FRONTEND_ORIGINS",
+    )
+
+    @property
+    def frontend_origin_list(self) -> list[str]:
+        return [origin.strip() for origin in self.frontend_origins.split(",") if origin.strip()]
 
 
 @lru_cache
@@ -30,4 +38,3 @@ def get_settings() -> Settings:
 
 
 settings = get_settings()
-

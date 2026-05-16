@@ -36,6 +36,7 @@ POSTGRES_PASSWORD
 SECRET_KEY
 YANDEX_JS_API_KEY
 YANDEX_PLACES_API_KEY
+FRONTEND_ORIGINS
 ```
 
 Generate `SECRET_KEY`:
@@ -82,4 +83,3 @@ Then seed starter queries:
 docker compose -f docker-compose.prod.yml --env-file .env.production run --rm web \
   python scripts/seed_query_catalog.py
 ```
-

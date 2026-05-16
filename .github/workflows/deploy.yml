@@ -54,6 +54,7 @@ jobs:
           YANDEX_JS_API_KEY=${{ secrets.YANDEX_JS_API_KEY }}
           YANDEX_PLACES_API_KEY=${{ secrets.YANDEX_PLACES_API_KEY }}
           EXPORT_TEMPLATE_PATH=
+          FRONTEND_ORIGINS=${{ secrets.FRONTEND_ORIGINS }}
           WEB_PORT=8000
           EOF
           scp .env.production.deploy "${{ secrets.HETZNER_USER }}@${{ secrets.HETZNER_HOST }}:/tmp/imagent.env"
