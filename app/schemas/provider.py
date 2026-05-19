@@ -30,5 +30,5 @@ class CompanyCandidate(BaseModel):
     categories: list[str] = Field(default_factory=list)
     rating: float | None = None
     review_count: int | None = None
+    needs_details: bool = False
     raw_payload: dict
-

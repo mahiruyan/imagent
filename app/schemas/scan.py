@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 
 
 class ScanCreateRequest(BaseModel):
-    provider: str = "yandex"
+    provider: str = "google"
     city: str | None = None
     category: str | None = None
     query_catalog_ids: list[uuid.UUID] = Field(default_factory=list)
@@ -31,4 +31,3 @@ class ScanBatchResponse(BaseModel):
     created_at: datetime
 
     model_config = {"from_attributes": True}
-

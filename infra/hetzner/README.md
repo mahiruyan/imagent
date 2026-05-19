@@ -34,8 +34,9 @@ Edit `.env.production`:
 POSTGRES_PASSWORD=<strong-db-password>
 DATABASE_URL=postgresql+asyncpg://imagent:<same-db-password>@db:5432/imagent
 SECRET_KEY=<long-random-secret>
-YANDEX_JS_API_KEY=<yandex-js-key>
-YANDEX_PLACES_API_KEY=<yandex-places-key>
+MAP_PROVIDER=google
+GOOGLE_MAPS_API_KEY=<browser-restricted-google-maps-key>
+GOOGLE_MAPS_BACKEND_KEY=<server-restricted-google-places-key>
 WEB_PORT=8000
 ```
 
@@ -83,11 +84,11 @@ Check health:
 curl http://127.0.0.1:8000/healthz
 ```
 
-## 8. Smoke-test Yandex provider
+## 8. Smoke-test Google provider
 
 ```bash
 docker compose -f docker-compose.prod.yml --env-file .env.production run --rm web \
-  python scripts/smoke_yandex_provider.py --query "CNC" --city "Izmir" --limit 5
+  python scripts/smoke_google_provider.py --query "CNC" --city "Izmir" --limit 5
 ```
 
 ## 9. Backups

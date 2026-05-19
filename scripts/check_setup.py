@@ -29,18 +29,25 @@ def check_env() -> list[CheckResult]:
     results = [
         CheckResult("DATABASE_URL", bool(settings.database_url), "set"),
         CheckResult("SECRET_KEY", bool(settings.secret_key), "set"),
-        CheckResult("MAP_PROVIDER", settings.map_provider == "yandex", settings.map_provider),
-        CheckResult(
-            "YANDEX_PLACES_API_KEY",
-            bool(settings.yandex_places_api_key),
-            "set" if settings.yandex_places_api_key else "missing",
-        ),
-        CheckResult(
-            "YANDEX_JS_API_KEY",
-            bool(settings.yandex_js_api_key),
-            "set" if settings.yandex_js_api_key else "missing",
-        ),
+        CheckResult("MAP_PROVIDER", settings.map_provider in {"yandex", "google"}, settings.map_provider),
     ]
+    if settings.map_provider == "google":
+        has_backend_key = bool(settings.google_maps_backend_key or settings.google_maps_api_key)
+        results.append(
+            CheckResult(
+                "GOOGLE_MAPS_BACKEND_KEY",
+                has_backend_key,
+                "set" if has_backend_key else "missing",
+            )
+        )
+    else:
+        results.append(
+            CheckResult(
+                "YANDEX_PLACES_API_KEY",
+                bool(settings.yandex_places_api_key),
+                "set" if settings.yandex_places_api_key else "missing",
+            )
+        )
     return results
 
 
@@ -58,4 +65,3 @@ async def main() -> None:
 
 if __name__ == "__main__":
     asyncio.run(main())
-

@@ -9,6 +9,7 @@ from sqlalchemy import select
 from app.db.session import AsyncSessionLocal
 from app.models.company import Company, CompanyCategory, CompanySource
 from app.models.scan import ScanBatch, ScanJob, ScanResult
+from app.providers.base import MapProvider
 from app.providers.factory import get_map_provider
 from app.schemas.provider import CompanyCandidate
 from app.services.dedupe import DedupeDecision, DedupeService
@@ -71,7 +72,7 @@ async def process_one_job() -> bool:
                 query=job.payload["query"],
                 city=job.payload.get("city"),
             )
-            stats = await persist_candidates(session, job, candidates)
+            stats = await persist_candidates(session, job, candidates, provider)
             finished = utcnow()
             job.status = "done"
             job.finished_at = finished
@@ -107,10 +108,39 @@ async def persist_candidates(
     session,
     job: ScanJob,
     candidates: list[CompanyCandidate],
+    provider: MapProvider,
 ) -> dict[str, int]:
     dedupe = DedupeService(session)
     stats = {"created": 0, "deduped": 0}
     for candidate in candidates:
+        existing_source = await find_existing_source(session, candidate)
+        if existing_source:
+            existing_source.last_seen_at = utcnow()
+            company = await session.get(Company, existing_source.company_id)
+            if not company:
+                raise RuntimeError("Provider source matched a missing company")
+            session.add(
+                ScanResult(
+                    batch_id=job.batch_id,
+                    job_id=job.id,
+                    company_id=company.id,
+                    company_source_id=existing_source.id,
+                    result_type="deduped",
+                    match_reason="provider_id_cache",
+                    score=1.0,
+                )
+            )
+            stats["deduped"] += 1
+            category = job.payload.get("category")
+            if category:
+                await ensure_company_category(session, company.id, category)
+            continue
+
+        if candidate.needs_details and candidate.source_id:
+            candidate = await provider.get_organization_details(candidate.source_id)
+            if not candidate.city:
+                candidate.city = job.payload.get("city")
+
         decision = await dedupe.decide(candidate)
         company, source, result_type = await apply_dedupe_decision(session, candidate, decision)
         if result_type == "created":
@@ -134,6 +164,17 @@ async def persist_candidates(
         if category:
             await ensure_company_category(session, company.id, category)
     return stats
+
+
+async def find_existing_source(session, candidate: CompanyCandidate) -> CompanySource | None:
+    if not candidate.source_id:
+        return None
+    return await session.scalar(
+        select(CompanySource).where(
+            CompanySource.provider == candidate.source_provider,
+            CompanySource.provider_entity_id == candidate.source_id,
+        )
+    )
 
 
 async def apply_dedupe_decision(

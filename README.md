@@ -1,6 +1,6 @@
 # imagent Backend
 
-Internal supplier discovery backend. Primary map provider is Yandex Maps, with a provider interface that keeps a later Google Maps migration contained.
+Internal supplier discovery backend. Primary map provider is Google Maps, with Yandex kept behind the same provider interface as a fallback.
 
 ## Local Setup
 
@@ -31,10 +31,10 @@ Seed starter search queries:
 python scripts/seed_query_catalog.py
 ```
 
-Smoke-test Yandex provider:
+Smoke-test Google provider:
 
 ```bash
-python scripts/smoke_yandex_provider.py --query "CNC" --city "Izmir" --limit 5
+python scripts/smoke_google_provider.py --query "CNC" --city "Izmir" --limit 5
 ```
 
 Run the worker in a second terminal:

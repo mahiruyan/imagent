@@ -45,14 +45,14 @@ jobs:
           cat > .env.production.deploy <<EOF
           ENVIRONMENT=production
           LOG_LEVEL=INFO
-          MAP_PROVIDER=yandex
+          MAP_PROVIDER=google
           POSTGRES_DB=imagent
           POSTGRES_USER=imagent
           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
           DATABASE_URL=postgresql+asyncpg://imagent:${{ secrets.POSTGRES_PASSWORD }}@db:5432/imagent
           SECRET_KEY=${{ secrets.SECRET_KEY }}
-          YANDEX_JS_API_KEY=${{ secrets.YANDEX_JS_API_KEY }}
-          YANDEX_PLACES_API_KEY=${{ secrets.YANDEX_PLACES_API_KEY }}
+          GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
+          GOOGLE_MAPS_BACKEND_KEY=${{ secrets.GOOGLE_MAPS_BACKEND_KEY }}
           EXPORT_TEMPLATE_PATH=
           FRONTEND_ORIGINS=${{ secrets.FRONTEND_ORIGINS }}
           WEB_PORT=8000

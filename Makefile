@@ -1,6 +1,6 @@
 PYTHON ?= python
 
-.PHONY: dev worker migrate test compile create-admin check-setup seed-queries smoke-yandex
+.PHONY: dev worker migrate test compile create-admin check-setup seed-queries smoke-google smoke-yandex
 
 dev:
 	$(PYTHON) -m uvicorn app.main:app --reload
@@ -25,6 +25,9 @@ check-setup:
 
 seed-queries:
 	$(PYTHON) scripts/seed_query_catalog.py
+
+smoke-google:
+	$(PYTHON) scripts/smoke_google_provider.py --query "CNC" --city "Izmir" --limit 5
 
 smoke-yandex:
 	$(PYTHON) scripts/smoke_yandex_provider.py --query "CNC" --city "Izmir" --limit 5
