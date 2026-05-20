@@ -16,6 +16,7 @@ class Settings(BaseSettings):
         default="development", alias="ENVIRONMENT"
     )
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
+    registration_code: str | None = Field(default=None, alias="REGISTRATION_CODE")
     map_provider: Literal["yandex", "google"] = Field(default="yandex", alias="MAP_PROVIDER")
     yandex_js_api_key: str | None = Field(default=None, alias="YANDEX_JS_API_KEY")
     yandex_places_api_key: str | None = Field(default=None, alias="YANDEX_PLACES_API_KEY")
