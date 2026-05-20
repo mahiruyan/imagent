@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 
 
 class ScanCreateRequest(BaseModel):
-    provider: str = "google"
+    provider: str = "yandex"
     city: str | None = None
     category: str | None = None
     query_catalog_ids: list[uuid.UUID] = Field(default_factory=list)
