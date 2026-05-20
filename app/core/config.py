@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     map_provider: Literal["yandex", "google"] = Field(default="yandex", alias="MAP_PROVIDER")
     yandex_js_api_key: str | None = Field(default=None, alias="YANDEX_JS_API_KEY")
     yandex_places_api_key: str | None = Field(default=None, alias="YANDEX_PLACES_API_KEY")
+    yandex_maps_api_key: str | None = Field(default=None, alias="YANDEX_MAPS_API_KEY")
+    yandex_maps_backend_key: str | None = Field(default=None, alias="YANDEX_MAPS_BACKEND_KEY")
     google_maps_api_key: str | None = Field(default=None, alias="GOOGLE_MAPS_API_KEY")
     google_maps_backend_key: str | None = Field(default=None, alias="GOOGLE_MAPS_BACKEND_KEY")
     export_template_path: str | None = Field(default=None, alias="EXPORT_TEMPLATE_PATH")
@@ -30,6 +32,14 @@ class Settings(BaseSettings):
     @property
     def frontend_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.frontend_origins.split(",") if origin.strip()]
+
+    @property
+    def yandex_backend_key(self) -> str | None:
+        return self.yandex_places_api_key or self.yandex_maps_backend_key or self.yandex_maps_api_key
+
+    @property
+    def yandex_browser_key(self) -> str | None:
+        return self.yandex_js_api_key or self.yandex_maps_api_key
 
 
 @lru_cache

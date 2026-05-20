@@ -41,11 +41,12 @@ def check_env() -> list[CheckResult]:
             )
         )
     else:
+        has_backend_key = bool(settings.yandex_backend_key)
         results.append(
             CheckResult(
-                "YANDEX_PLACES_API_KEY",
-                bool(settings.yandex_places_api_key),
-                "set" if settings.yandex_places_api_key else "missing",
+                "YANDEX_BACKEND_KEY",
+                has_backend_key,
+                "set" if has_backend_key else "missing",
             )
         )
     return results
