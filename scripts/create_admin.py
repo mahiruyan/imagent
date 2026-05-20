@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import os
 
 from sqlalchemy import select
 
@@ -34,12 +35,15 @@ async def create_admin(username: str, password: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Create or update an admin user.")
-    parser.add_argument("--username", required=True)
-    parser.add_argument("--password", required=True)
+    parser.add_argument("--username", default=os.getenv("ADMIN_USERNAME"))
+    parser.add_argument("--password", default=os.getenv("ADMIN_PASSWORD"))
     args = parser.parse_args()
+    if not args.username or not args.password:
+        raise SystemExit(
+            "Provide --username/--password or set ADMIN_USERNAME and ADMIN_PASSWORD."
+        )
     asyncio.run(create_admin(args.username, args.password))
 
 
 if __name__ == "__main__":
     main()
-

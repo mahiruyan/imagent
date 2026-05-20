@@ -29,6 +29,12 @@ Create the first admin after migrations:
 python scripts/create_admin.py --username admin --password 'change-me'
 ```
 
+Or set `ADMIN_USERNAME` and `ADMIN_PASSWORD` in `.env`, then run:
+
+```bash
+python scripts/create_admin.py
+```
+
 Validate environment and database connectivity:
 
 ```bash
