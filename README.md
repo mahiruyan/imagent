@@ -13,6 +13,16 @@ alembic upgrade head
 uvicorn app.main:app --reload
 ```
 
+Docker-based local preview:
+
+```bash
+cp .env.example .env
+docker compose up -d db
+docker compose run --rm web alembic upgrade head
+docker compose run --rm web python scripts/create_admin.py --username admin --password change-me
+docker compose up -d --build web worker
+```
+
 Create the first admin after migrations:
 
 ```bash
