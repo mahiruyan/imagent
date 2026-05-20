@@ -1,6 +1,6 @@
 # imagent Backend
 
-Internal supplier discovery backend. Primary map provider is Google Maps, with Yandex kept behind the same provider interface as a fallback.
+Internal supplier discovery backend. Primary map provider is Yandex Maps.
 
 ## Local Setup
 
@@ -47,10 +47,10 @@ Seed starter search queries:
 python scripts/seed_query_catalog.py
 ```
 
-Smoke-test Google provider:
+Smoke-test Yandex provider:
 
 ```bash
-python scripts/smoke_google_provider.py --query "CNC" --city "Izmir" --limit 5
+python scripts/smoke_yandex_provider.py --query "CNC" --city "Izmir" --limit 5
 ```
 
 Run the worker in a second terminal:
@@ -64,5 +64,3 @@ Do not commit real API keys. Use `.env`.
 ## Hetzner
 
 Production setup lives in [infra/hetzner/README.md](infra/hetzner/README.md).
-
-GitHub-based deployment lives in [infra/hetzner/GITHUB_DEPLOY.md](infra/hetzner/GITHUB_DEPLOY.md).

@@ -1,6 +1,6 @@
 # Hetzner Deployment
 
-This setup runs PostgreSQL, the FastAPI web service, and the scan worker on the Hetzner server with Docker Compose.
+This setup runs PostgreSQL, the FastAPI web service, and the scan worker on the Hetzner server with Docker Compose. Deployment is manual on the server.
 
 ## 1. Server packages
 
@@ -34,9 +34,12 @@ Edit `.env.production`:
 POSTGRES_PASSWORD=<strong-db-password>
 DATABASE_URL=postgresql+asyncpg://imagent:<same-db-password>@db:5432/imagent
 SECRET_KEY=<long-random-secret>
-MAP_PROVIDER=google
-GOOGLE_MAPS_API_KEY=<browser-restricted-google-maps-key>
-GOOGLE_MAPS_BACKEND_KEY=<server-restricted-google-places-key>
+MAP_PROVIDER=yandex
+YANDEX_MAPS_API_KEY=<yandex-js-maps-key>
+YANDEX_MAPS_BACKEND_KEY=<yandex-places-http-key>
+FRONTEND_ORIGINS=<frontend-url>
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=<strong-admin-password>
 WEB_PORT=8000
 ```
 
@@ -62,7 +65,7 @@ docker compose -f docker-compose.prod.yml --env-file .env.production run --rm we
 
 ```bash
 docker compose -f docker-compose.prod.yml --env-file .env.production run --rm web \
-  python scripts/create_admin.py --username admin --password '<admin-password>'
+  python scripts/create_admin.py
 ```
 
 ## 6. Seed query catalog
@@ -84,11 +87,11 @@ Check health:
 curl http://127.0.0.1:8000/healthz
 ```
 
-## 8. Smoke-test Google provider
+## 8. Smoke-test Yandex provider
 
 ```bash
 docker compose -f docker-compose.prod.yml --env-file .env.production run --rm web \
-  python scripts/smoke_google_provider.py --query "CNC" --city "Izmir" --limit 5
+  python scripts/smoke_yandex_provider.py --query "CNC" --city "Izmir" --limit 5
 ```
 
 ## 9. Backups
