@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import os
 
+from dotenv import load_dotenv
 from sqlalchemy import select
 
 from app.core.security import hash_password
@@ -34,6 +35,7 @@ async def create_admin(username: str, password: str) -> None:
 
 
 def main() -> None:
+    load_dotenv()
     parser = argparse.ArgumentParser(description="Create or update an admin user.")
     parser.add_argument("--username", default=os.getenv("ADMIN_USERNAME"))
     parser.add_argument("--password", default=os.getenv("ADMIN_PASSWORD"))
